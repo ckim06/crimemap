@@ -1,0 +1,22 @@
+<section>
+  <div class="page-header">
+    <h1>Crimes</h1>
+  </div>
+  <div class="list-group">
+    {{ crimes}}
+    <p ng-repeat="crime in vm.crimes" class="list-group-item">
+      {{crime.date_rptd}}<br/>
+      {{crime.dr_no}}<br/>
+      {{crime.date_occ}}<br/>
+      {{crime.time_occ}}<br/>
+      {{crime.area}}<br/>
+      {{crime.dr_no}}<br/>
+      {{crime.area_name}}<br/>
+      {{crime.crm_cd_desc}}<br/>
+      {{crime.location}}<br/>
+      {{crime.coord}}<br/>
+    </p>
+  </div>
+
+  <ui-gmap-google-map center='vm.map.center' zoom='vm.map.zoom'></ui-gmap-google-map>
+</section>
