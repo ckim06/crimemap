@@ -3,13 +3,9 @@
 /**
  * Module dependencies
  */
-var crimesPolicy = require('../policies/crimes.server.policy'),
-  crimes = require('../controllers/crimes.server.controller');
+var crimes = require('../controllers/crimes.server.controller');
 
-module.exports = function (app) {
-  // Articles collection routes
-  app.route('/api/crimes').all(crimesPolicy.isAllowed)
-    .get(crimes.list);
-
-
+module.exports = function(app) {
+  app.route('/api/crimes').get(crimes.list);
+  app.route('/api/crimes/types').get(crimes.crimeTypes);
 };
