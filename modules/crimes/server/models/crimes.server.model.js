@@ -10,11 +10,7 @@ var mongoose = require('mongoose'),
  * Article Schema
  */
 var CrimeSchema = new Schema({
-  id: {
-    type: String,
-    default: '',
-    trim: true
-  },
+
   date_rptd: {
     type: Date,
     default: Date.now

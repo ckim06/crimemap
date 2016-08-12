@@ -4,15 +4,19 @@
   </div>
   <div class="list-group">
     <ui-gmap-google-map center='vm.map.center' zoom='vm.map.zoom'>
-      <ui-gmap-markers coords="'self'" fit="true" models="vm.markers" click="onClick">
-        <ui-gmap-windows ng-cloak show="show">
-                        <div ng-non-bindable>{{dr_no}}</div>
-                    </ui-gmap-windows>
+      <ui-gmap-window show="vm.showWindow" coords="vm.markerModel">
+        <div>{{vm.markerModel.dr_no}}</div>
+      </ui-gmap-window>
+      <ui-gmap-markers idkey="'dr_no'" icon="'icon'" coords="'self'" fit="true" models="vm.markers" events="vm.mapEvents">
       </ui-gmap-markers>
     </ui-gmap-google-map>
   </div>
-
   <select ng-change="vm.selectCrimeType()" ng-model="vm.crimeTypeOption">
-    <option ng-repeat="crimeType in vm.crimeTypes" value="{{crimeType}}">{{crimeType}}</option>
+    <option ng-repeat="crimeType in vm.crimeTypes | orderBy" value="{{crimeType}}">{{crimeType}}</option>
   </select>
+  {{vm.markers.length}}
 </section>
+IDEAS
+<br/> search in bounds
+<br/> top reported crimes within bounds
+<br/> multiple incidents in one loaction to lower number of dots.  How to make distinct location but with multiple crimes?  Marker clusters

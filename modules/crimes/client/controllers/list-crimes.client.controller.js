@@ -22,16 +22,22 @@
       },
       zoom: 8
     };
-
-    vm.markers = CrimesService.query();
+    vm.showWindow = true;
+    vm.markers = CrimesService.query(function(){
+      vm.markers.forEach(function(marker){
+        marker.icon = "/modules/crimes/client/img/dot.png";
+      });
+    });
     vm.crimeTypes = CrimesService.types();
-
-    vm.onClick = function(marker, eventName, model) {
-      model.show = !model.show;
+    vm.mapEvents = {
+      click: function(marker, eventName, model) {
+        vm.markerModel = model;
+        vm.markerModel.show = true;
+      }
     };
 
     vm.selectCrimeType = function() {
-      vm.crimes = CrimesService.query({
+      vm.markers = CrimesService.query({
         crm_cd_desc: vm.crimeTypeOption
       });
     };
