@@ -11,16 +11,29 @@ var path = require('path'),
  * List of Articles
  */
 exports.list = function(req, res) {
+  var request = req.query;
+  request.latitude = {
+    $ne: 0
+  };
+  request.longitude = {
+    $ne: 0
+  };
+
   Crime.find(req.query).limit(400).exec(function(err, crimes) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
+      crimes.forEach(function(crime) {
+        crime.id = crime.dr_no;
+      });
       res.json(crimes);
+
     }
   });
 };
+
 
 exports.crimeTypes = function(req, res) {
   Crime.distinct('crm_cd_desc').exec(function(err, crimeTypes) {

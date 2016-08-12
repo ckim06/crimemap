@@ -10,7 +10,7 @@ var mongoose = require('mongoose'),
  * Article Schema
  */
 var CrimeSchema = new Schema({
-  uid: {
+  id: {
     type: String,
     default: '',
     trim: true
@@ -73,10 +73,8 @@ var CrimeSchema = new Schema({
     default: '',
     trim: true
   },
-  coord: {
-    latitude: String,
-    longitude: String
-  }
+  latitude: Number,
+  longitude: Number
 });
 
 mongoose.model('Crime', CrimeSchema);

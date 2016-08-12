@@ -4,9 +4,14 @@
   </div>
   <div class="list-group">
     <ui-gmap-google-map center='vm.map.center' zoom='vm.map.zoom'>
-      <ui-gmap-marker coords="crime.coord" ng-repeat="crime in vm.crimes" idkey="crime.dr_no"></ui-gmap-marker>
+      <ui-gmap-markers coords="'self'" fit="true" models="vm.markers" click="onClick">
+        <ui-gmap-windows ng-cloak show="show">
+                        <div ng-non-bindable>{{dr_no}}</div>
+                    </ui-gmap-windows>
+      </ui-gmap-markers>
     </ui-gmap-google-map>
   </div>
+
   <select ng-change="vm.selectCrimeType()" ng-model="vm.crimeTypeOption">
     <option ng-repeat="crimeType in vm.crimeTypes" value="{{crimeType}}">{{crimeType}}</option>
   </select>

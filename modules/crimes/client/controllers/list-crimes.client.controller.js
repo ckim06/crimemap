@@ -23,12 +23,17 @@
       zoom: 8
     };
 
-    vm.crimes = CrimesService.query();
+    vm.markers = CrimesService.query();
     vm.crimeTypes = CrimesService.types();
 
+    vm.onClick = function(marker, eventName, model) {
+      model.show = !model.show;
+    };
 
     vm.selectCrimeType = function() {
-      vm.crimes = CrimesService.query({crm_cd_desc: vm.crimeTypeOption});
+      vm.crimes = CrimesService.query({
+        crm_cd_desc: vm.crimeTypeOption
+      });
     };
   }
 }());
