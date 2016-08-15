@@ -15,6 +15,17 @@
       offset: '@offset',
       filter: '@filter'
     }, {
+      query: {
+        method: 'GET',
+        isArray: true,
+        transformResponse: function(data, headers) {
+          var markers = angular.fromJson(data);
+          markers.forEach(function(marker) {
+            marker.icon = '/modules/crimes/client/img/dot.png';
+          });
+          return markers;
+        }
+      },
       types: {
         method: 'GET',
         url: 'api/crimes/types',

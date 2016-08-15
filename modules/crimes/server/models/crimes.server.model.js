@@ -70,7 +70,11 @@ var CrimeSchema = new Schema({
     trim: true
   },
   latitude: Number,
-  longitude: Number
+  longitude: Number,
+  coords: {
+    latitude: Number,
+    longitude: Number
+  }
 });
 
 mongoose.model('Crime', CrimeSchema);

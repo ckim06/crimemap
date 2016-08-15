@@ -3,12 +3,13 @@
     <h1>Crimes</h1>
   </div>
   <div class="list-group">
-    <ui-gmap-google-map center='vm.map.center' zoom='vm.map.zoom'>
-      <ui-gmap-window show="vm.showWindow" coords="vm.markerModel">
+    <ui-gmap-google-map center="vm.map.center" zoom="vm.map.zoom" control="vm.map.control">
+      <ui-gmap-window show="vm.map.showWindow" coords="vm.markerModel">
         <div>{{vm.markerModel.dr_no}}</div>
       </ui-gmap-window>
-      <ui-gmap-markers idkey="'dr_no'" icon="'icon'" coords="'self'" fit="true" models="vm.markers" events="vm.mapEvents">
+      <ui-gmap-markers idkey="'dr_no'" icon="'icon'" coords="'self'" models="vm.markers" events="vm.map.events">
       </ui-gmap-markers>
+       <ui-gmap-drag-zoom keyboardkey="'alt'"></ui-gmap-drag-zoom>
     </ui-gmap-google-map>
   </div>
   <select ng-change="vm.selectCrimeType()" ng-model="vm.crimeTypeOption">

@@ -11,29 +11,49 @@
     .module('crimes', ['uiGmapgoogle-maps'])
     .controller('CrimesListController', CrimesListController);
 
-  CrimesListController.$inject = ['CrimesService', 'uiGmapGoogleMapApi'];
+  CrimesListController.$inject = ['CrimesService', 'uiGmapGoogleMapApi', 'uiGmapIsReady', '$timeout'];
 
-  function CrimesListController(CrimesService, uiGmapGoogleMapApi) {
+  function CrimesListController(CrimesService, uiGmapGoogleMapApi, uiGmapIsReady, $timeout) {
     var vm = this;
     vm.map = {
       center: {
         latitude: 34.0446,
         longitude: -118.2450
       },
-      zoom: 8
+      zoom: 13,
+      control: {}
     };
-    vm.showWindow = true;
-    vm.markers = CrimesService.query(function(){
-      vm.markers.forEach(function(marker){
-        marker.icon = "/modules/crimes/client/img/dot.png";
+    vm.map.showWindow = true;
+    vm.mapInstance = {};
+    uiGmapIsReady.promise(1).then(function(instances) {
+      instances.forEach(function(inst) {
+        vm.mapInstance = inst.map;
       });
+
+      vm.map.events = {
+        click: function(marker, eventName, model) {
+          vm.markerModel = model;
+          vm.markerModel.show = true;
+        }
+      };
+      vm.mapInstance.addListener('idle', vm.onDragEnd);
+
     });
+
+    vm.markers = CrimesService.query();
     vm.crimeTypes = CrimesService.types();
-    vm.mapEvents = {
-      click: function(marker, eventName, model) {
-        vm.markerModel = model;
-        vm.markerModel.show = true;
-      }
+
+    vm.onDragEnd = function() {
+      var bounds = vm.mapInstance.getBounds();
+
+      vm.markers = CrimesService.query({
+        box: {
+          $box: [
+            [bounds.j.H, bounds.H.j],
+            [bounds.j.j, bounds.H.H]
+          ]
+        }
+      });
     };
 
     vm.selectCrimeType = function() {
