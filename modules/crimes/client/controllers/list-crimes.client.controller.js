@@ -62,7 +62,7 @@
 
     vm.selectCrimeType = function() {
       vm.markers = CrimesService.query({
-        crm_cd_desc: vm.crimeTypeOption
+        crm_cd: vm.crimeTypeOption
       });
     };
   }

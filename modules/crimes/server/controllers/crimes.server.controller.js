@@ -44,7 +44,14 @@ exports.list = function(req, res) {
   });
 };
 exports.crimeTypes = function(req, res) {
-  Crime.distinct('crm_cd_desc').exec(function(err, crimeTypes) {
+  Crime.aggregate([{
+    $group: {
+      _id: {
+        crm_cd: '$crm_cd',
+        crm_cd_desc: '$crm_cd_desc'
+      }
+    }
+  }]).exec(function(err, crimeTypes) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)

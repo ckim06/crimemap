@@ -14,7 +14,7 @@
     </ui-gmap-google-map>
   </div>
   <select ng-change="vm.selectCrimeType()" ng-model="vm.crimeTypeOption">
-    <option ng-repeat="crimeType in vm.crimeTypes | orderBy" value="{{crimeType}}">{{crimeType}}</option>
+    <option ng-repeat="crimeType in vm.crimeTypes | orderBy: '_id.crm_cd_desc'" value="{{crimeType._id.crm_cd}}">{{crimeType._id.crm_cd_desc}}</option>
   </select>
   {{vm.markers.length}}
   <div class="list-group">
