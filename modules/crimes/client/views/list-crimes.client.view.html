@@ -2,6 +2,7 @@
   <div class="page-header">
     <h1>Crimes</h1>
   </div>
+
   <div class="list-group">
     <ui-gmap-google-map center="vm.map.center" zoom="vm.map.zoom" control="vm.map.control">
       <ui-gmap-window show="vm.map.showWindow" coords="vm.markerModel">
@@ -16,8 +17,12 @@
     <option ng-repeat="crimeType in vm.crimeTypes | orderBy" value="{{crimeType}}">{{crimeType}}</option>
   </select>
   {{vm.markers.length}}
+  <div class="list-group">
+    <ol>
+      <li ng-repeat="type in vm.topTypes" >({{type.count}}) {{type._id}}</li>
+    </ol>
+  </div>
 </section>
 IDEAS
-<br/> search in bounds
-<br/> top reported crimes within bounds
+<br/> percentage higher than average of crime
 <br/> multiple incidents in one loaction to lower number of dots.  How to make distinct location but with multiple crimes?  Marker clusters

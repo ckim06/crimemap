@@ -11,16 +11,16 @@
     .module('crimes', ['uiGmapgoogle-maps'])
     .controller('CrimesListController', CrimesListController);
 
-  CrimesListController.$inject = ['CrimesService', 'uiGmapGoogleMapApi', 'uiGmapIsReady', '$timeout'];
+  CrimesListController.$inject = ['CrimesService', 'uiGmapGoogleMapApi', 'uiGmapIsReady'];
 
-  function CrimesListController(CrimesService, uiGmapGoogleMapApi, uiGmapIsReady, $timeout) {
+  function CrimesListController(CrimesService, uiGmapGoogleMapApi, uiGmapIsReady) {
     var vm = this;
     vm.map = {
       center: {
         latitude: 34.0446,
         longitude: -118.2450
       },
-      zoom: 13,
+      zoom: 9,
       control: {}
     };
     vm.map.showWindow = true;
@@ -36,23 +36,27 @@
           vm.markerModel.show = true;
         }
       };
-      vm.mapInstance.addListener('idle', vm.onDragEnd);
+      vm.mapInstance.addListener('idle', vm.onIdle);
 
     });
 
     vm.markers = CrimesService.query();
     vm.crimeTypes = CrimesService.types();
 
-    vm.onDragEnd = function() {
+    vm.onIdle = function() {
       var bounds = vm.mapInstance.getBounds();
-
+      var boundsBox = JSON.stringify([
+        [bounds.j.H, bounds.H.j],
+        [bounds.j.j, bounds.H.H]
+      ]);
       vm.markers = CrimesService.query({
-        box: {
-          $box: [
-            [bounds.j.H, bounds.H.j],
-            [bounds.j.j, bounds.H.H]
-          ]
-        }
+        'box': boundsBox
+      });
+      vm.getTopTypes(boundsBox);
+    };
+    vm.getTopTypes = function(box) {
+      vm.topTypes = CrimesService.topTypes({
+        'box': box
       });
     };
 

@@ -30,6 +30,14 @@
         method: 'GET',
         url: 'api/crimes/types',
         isArray: true
+      },
+      topTypes: {
+        method: 'GET',
+        params: {
+          box: '@box'
+        },
+        url: 'api/crimes/types/top/:box',
+        isArray: true
       }
     });
     return Crime;
