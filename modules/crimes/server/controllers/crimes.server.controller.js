@@ -11,33 +11,65 @@ var path = require('path'),
  * List of Crimes
  */
 exports.list = function(req, res) {
-  var request = req.query;
-  request['coords.latitude'] = {
-    $ne: 0
-  };
-  request['coords.longitude'] = {
-    $ne: 0
-  };
-
-  var query = req.query;
+  var query = [];
   if (req.query.box) {
-    query.coords = {
-      '$geoWithin': {
-        '$box': JSON.parse(req.query.box)
+    var match = {
+      '$match': {
+        'coords': {
+          '$geoWithin': {
+            '$box': JSON.parse(req.query.box)
+          }
+        }
       }
-    };
-    delete req.query.box;
-  }
 
-  Crime.find(query).limit(1000).exec(function(err, crimes) {
+    };
+    query.push(match);
+  }
+  query.push({
+    $group: {
+      _id: {
+        coords: '$coords'
+      },
+      dr_nos: {
+        $push: '$dr_no'
+      },
+      locations: {
+        $push: '$location'
+      },
+      crm_cd_descs: {
+        $push: '$crm_cd_desc'
+      }
+    }
+  });
+
+
+  Crime.aggregate(query).limit(500).exec(function(err, locations) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      crimes.forEach(function(crime) {
-        crime.latitude = crime.coords.latitude;
-        crime.longitude = crime.coords.longitude;
+      var crimes = [];
+      var id = 0;
+      locations.forEach(function(location) {
+        var marker = {
+          id: id,
+          latitude: location._id.coords.latitude,
+          longitude: location._id.coords.longitude,
+          location: location.location,
+          crimes: []
+        };
+        id = id + 1;
+
+        location.dr_nos.forEach(function(dr_no, index) {
+          var crime = {
+            dr_no: dr_no,
+            location: location.locations[index],
+            crm_cd_desc: location.crm_cd_descs[index]
+          };
+          marker.crimes.push(crime);
+        });
+        crimes.push(marker);
       });
       res.json(crimes);
     }

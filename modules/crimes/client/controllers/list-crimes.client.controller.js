@@ -23,7 +23,7 @@
       zoom: 9,
       control: {}
     };
-    vm.map.showWindow = true;
+    vm.showWindow = false;
     vm.mapInstance = {};
     uiGmapIsReady.promise(1).then(function(instances) {
       instances.forEach(function(inst) {
@@ -32,8 +32,10 @@
 
       vm.map.events = {
         click: function(marker, eventName, model) {
-          vm.markerModel = model;
-          vm.markerModel.show = true;
+          vm.windowParams = {
+            markedModel: model
+          };
+          vm.showWindow = true;
         }
       };
       vm.mapInstance.addListener('idle', vm.onIdle);

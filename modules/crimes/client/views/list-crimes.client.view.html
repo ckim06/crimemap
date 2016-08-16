@@ -5,12 +5,9 @@
 
   <div class="list-group">
     <ui-gmap-google-map center="vm.map.center" zoom="vm.map.zoom" control="vm.map.control">
-      <ui-gmap-window show="vm.map.showWindow" coords="vm.markerModel">
-        <div>{{vm.markerModel.dr_no}}</div>
-      </ui-gmap-window>
-      <ui-gmap-markers idkey="'dr_no'" icon="'icon'" coords="'self'" models="vm.markers" events="vm.map.events">
+      <ui-gmap-window show="vm.showWindow" coords="vm.windowParams.markerModel" templateUrl="'window-crimes.view.html'">ll</ui-gmap-window>
+      <ui-gmap-markers icon="'icon'" coords="'self'" models="vm.markers" events="vm.map.events">
       </ui-gmap-markers>
-       <ui-gmap-drag-zoom keyboardkey="'alt'"></ui-gmap-drag-zoom>
     </ui-gmap-google-map>
   </div>
   <select ng-change="vm.selectCrimeType()" ng-model="vm.crimeTypeOption">
@@ -19,10 +16,10 @@
   {{vm.markers.length}}
   <div class="list-group">
     <ol>
-      <li ng-repeat="type in vm.topTypes" >({{type.count}}) {{type._id}}</li>
+      <li ng-repeat="type in vm.topTypes">({{type.count}}) {{type._id}}</li>
     </ol>
   </div>
 </section>
 IDEAS
 <br/> percentage higher than average of crime
-<br/> multiple incidents in one loaction to lower number of dots.  How to make distinct location but with multiple crimes?  Marker clusters
+<br/> multiple incidents in one loaction to lower number of dots. How to make distinct location but with multiple crimes? Marker clusters
