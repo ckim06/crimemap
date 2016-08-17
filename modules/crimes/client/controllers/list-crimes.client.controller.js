@@ -48,8 +48,8 @@
     vm.onIdle = function() {
       var bounds = vm.mapInstance.getBounds();
       var boundsBox = JSON.stringify([
-        [bounds.j.H, bounds.H.j],
-        [bounds.j.j, bounds.H.H]
+        [bounds.getSouthWest().lng(), bounds.getNorthEast().lat()],
+        [bounds.getNorthEast().lng(), bounds.getSouthWest().lat()]
       ]);
       vm.markers = CrimesService.query({
         'box': boundsBox
