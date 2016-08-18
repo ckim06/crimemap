@@ -20,14 +20,25 @@
         latitude: 34.0446,
         longitude: -118.2450
       },
-      zoom: 9,
+      zoom: 14,
       control: {}
     };
     vm.showWindow = false;
     vm.mapInstance = {};
+    vm.markers = [];
     uiGmapIsReady.promise(1).then(function(instances) {
       instances.forEach(function(inst) {
         vm.mapInstance = inst.map;
+        var bounds = vm.mapInstance.getBounds();
+        vm.boundsBox = JSON.stringify([
+          [bounds.getSouthWest().lng(), bounds.getNorthEast().lat()],
+          [bounds.getNorthEast().lng(), bounds.getSouthWest().lat()]
+        ]);
+
+        var query = {
+          'box': vm.boundsBox
+        };
+        vm.markers = CrimesService.query(query);
       });
 
       vm.map.events = {
@@ -42,19 +53,24 @@
 
     });
 
-    vm.markers = CrimesService.query();
+
     vm.crimeTypes = CrimesService.types();
 
     vm.onIdle = function() {
       var bounds = vm.mapInstance.getBounds();
-      var boundsBox = JSON.stringify([
+      vm.boundsBox = JSON.stringify([
         [bounds.getSouthWest().lng(), bounds.getNorthEast().lat()],
         [bounds.getNorthEast().lng(), bounds.getSouthWest().lat()]
       ]);
-      vm.markers = CrimesService.query({
-        'box': boundsBox
-      });
-      vm.getTopTypes(boundsBox);
+
+      var query = {
+        'box': vm.boundsBox
+      };
+      if (vm.crimeTypeOption) {
+        query.crimeTypeOption = vm.crimeTypeOption;
+      }
+      vm.markers = CrimesService.query(query);
+      vm.getTopTypes(vm.boundsBox);
     };
     vm.getTopTypes = function(box) {
       vm.topTypes = CrimesService.topTypes({
@@ -63,9 +79,13 @@
     };
 
     vm.selectCrimeType = function() {
-      vm.markers = CrimesService.query({
-        crm_cd: vm.crimeTypeOption
-      });
+      var query = {
+        crimeTypeOption: vm.crimeTypeOption
+      };
+      if (vm.boundsBox) {
+        query.box = vm.boundsBox;
+      }
+      vm.markers = CrimesService.query(query);
     };
   }
 }());

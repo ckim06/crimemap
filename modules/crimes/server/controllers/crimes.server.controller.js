@@ -24,10 +24,20 @@ exports.list = function(req, res) {
     };
     query.push(match);
   }
+
+  if (req.query.crimeTypeOption) {
+    var crimeTypeMatch = {
+      '$match': {
+        crm_cd: req.query.crimeTypeOption
+      }
+    };
+    query.push(crimeTypeMatch);
+  }
   query.push({
     $group: {
-      _id: {
-        coords: '$coords'
+      _id: '$coords',
+      count: {
+        $sum: 1
       },
       dr_nos: {
         $push: '$dr_no'
@@ -41,7 +51,13 @@ exports.list = function(req, res) {
     }
   });
 
-  Crime.aggregate(query).limit(500).exec(function(err, locations) {
+  query.push({
+    $sort: {
+      count: -1
+    }
+  });
+
+  Crime.aggregate(query).limit(5000).exec(function(err, locations) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -52,9 +68,9 @@ exports.list = function(req, res) {
       locations.forEach(function(location) {
         var marker = {
           id: id,
-          latitude: location._id.coords.latitude,
-          longitude: location._id.coords.longitude,
-          location: location.location,
+          latitude: location._id.latitude,
+          longitude: location._id.longitude,
+          count: location.count,
           crimes: []
         };
         id = id + 1;
