@@ -1,8 +1,5 @@
 <ol>
-  <li ng-repeat="crime in parameter.markedModel.crimes | orderBy: 'crm_cd_desc'">
-    <h5>{{crime.crm_cd_desc}}</h5>
-    <p>{{crime.dr_no}}
-      <br/> {{crime.location}}
-    </p>
+  <li ng-repeat="(key, value) in parameter.markedModel.crime_descs">
+    <span class="crimeDesc">{{key}}</span> ({{value.count}})
   </li>
 </ol>

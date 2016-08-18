@@ -23,14 +23,17 @@
           var maxNumberOfCrimes = markers[0].count;
           var steps = Math.ceil(maxNumberOfCrimes / 5);
           markers.forEach(function(marker) {
-            var number = Math.ceil(marker.crimes.length / steps);
+
+            // figure out coloring scheme
+            var number = Math.ceil(marker.count / steps);
             if (number === 1) {
-              number = Math.ceil(marker.crimes.length / (steps / 5));
+              number = Math.ceil(marker.count / (steps / 5));
             } else {
               number = 5;
             }
             console.log(number);
             marker.icon = '/modules/crimes/client/img/' + number + '.png';
+
           });
           return markers;
         }

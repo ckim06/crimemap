@@ -71,17 +71,20 @@ exports.list = function(req, res) {
           latitude: location._id.latitude,
           longitude: location._id.longitude,
           count: location.count,
-          crimes: []
+          crime_descs: {}
         };
         id = id + 1;
 
-        location.dr_nos.forEach(function(dr_no, index) {
-          var crime = {
-            dr_no: dr_no,
-            location: location.locations[index],
-            crm_cd_desc: location.crm_cd_descs[index]
-          };
-          marker.crimes.push(crime);
+        location.crm_cd_descs.forEach(function(desc, index) {
+          if (marker.crime_descs[desc]) {
+            marker.crime_descs[desc].count++;
+            marker.crime_descs[desc].dr_nos.push(location.dr_nos[index]);
+          } else {
+            marker.crime_descs[desc] = {
+              'count': 1,
+              'dr_nos': [location.dr_nos[index]]
+            };
+          }
         });
         crimes.push(marker);
       });
