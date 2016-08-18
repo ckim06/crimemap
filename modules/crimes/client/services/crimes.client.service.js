@@ -21,7 +21,11 @@
         transformResponse: function(data, headers) {
           var markers = angular.fromJson(data);
           markers.forEach(function(marker) {
-            marker.icon = '/modules/crimes/client/img/dot.png';
+            var number = Math.ceil(marker.crimes.length / 50);
+            if (number > 10) {
+              console.log(marker.crimes.length);
+            }
+            marker.icon = '/modules/crimes/client/img/' + number + '.png';
           });
           return markers;
         }
