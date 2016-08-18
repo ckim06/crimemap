@@ -20,11 +20,16 @@
         isArray: true,
         transformResponse: function(data, headers) {
           var markers = angular.fromJson(data);
+          var maxNumberOfCrimes = markers[0].count;
+          var steps = Math.ceil(maxNumberOfCrimes / 5);
           markers.forEach(function(marker) {
-            var number = Math.ceil(marker.crimes.length / 50);
-            if (number > 10) {
-              console.log(marker.crimes.length);
+            var number = Math.ceil(marker.crimes.length / steps);
+            if (number === 1) {
+              number = Math.ceil(marker.crimes.length / (steps / 5));
+            } else {
+              number = 5;
             }
+            console.log(number);
             marker.icon = '/modules/crimes/client/img/' + number + '.png';
           });
           return markers;
