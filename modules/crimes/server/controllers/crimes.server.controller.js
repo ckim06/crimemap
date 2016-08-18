@@ -21,7 +21,6 @@ exports.list = function(req, res) {
           }
         }
       }
-
     };
     query.push(match);
   }
@@ -41,7 +40,6 @@ exports.list = function(req, res) {
       }
     }
   });
-
 
   Crime.aggregate(query).limit(500).exec(function(err, locations) {
     if (err) {
