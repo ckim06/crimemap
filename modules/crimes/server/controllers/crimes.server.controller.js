@@ -93,14 +93,27 @@ exports.list = function(req, res) {
   });
 };
 exports.crimeTypes = function(req, res) {
-  Crime.aggregate([{
+  var query = [{
     $group: {
       _id: {
         crm_cd: '$crm_cd',
         crm_cd_desc: '$crm_cd_desc'
       }
     }
-  }]).exec(function(err, crimeTypes) {
+  }];
+  if (req.query.box) {
+    var match = {
+      '$match': {
+        'coords': {
+          '$geoWithin': {
+            '$box': JSON.parse(req.query.box)
+          }
+        }
+      }
+    };
+    query.unshift(match);
+  }
+  Crime.aggregate(query).exec(function(err, crimeTypes) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)

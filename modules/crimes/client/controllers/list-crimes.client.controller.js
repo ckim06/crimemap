@@ -66,8 +66,6 @@
       vm.mapInstance.addListener('idle', vm.onIdle);
 
     });
-
-
     vm.crimeTypes = CrimesService.types();
 
     vm.onIdle = function() {
@@ -85,10 +83,13 @@
       }
       vm.markers = CrimesService.query(query);
       vm.getTopTypes(vm.boundsBox);
+      vm.crimeTypes = CrimesService.types({
+        'box': vm.boundsBox
+      });
     };
     vm.getTopTypes = function(box) {
       vm.topTypes = CrimesService.topTypes({
-        'box': box
+        'box': vm.boundsBox
       });
     };
 

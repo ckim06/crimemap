@@ -41,6 +41,9 @@
       types: {
         method: 'GET',
         url: 'api/crimes/types',
+        params: {
+          box: '@box'
+        },
         isArray: true
       },
       topTypes: {
