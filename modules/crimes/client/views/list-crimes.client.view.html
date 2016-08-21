@@ -4,6 +4,8 @@
   </div>
 
   <div class="list-group">
+    <p>{{vm.markers.length}} crimes reported within these bounds.</p>
+    <p ng-show="vm.markers.length == 1000">More than 1000 crimes within these bounds.  Only showing top 1000.</p>
     <ui-gmap-google-map center="vm.map.center" zoom="vm.map.zoom" control="vm.map.control">
       <ui-gmap-window show="vm.showWindow" coords="vm.windowParams.markedModel" templateUrl="'/modules/crimes/client/views/window-crimes.view.html'" templateParameter="vm.windowParams"></ui-gmap-window>
       <ui-gmap-markers icon="'icon'" coords="'self'" models="vm.markers" events="vm.map.events">
@@ -14,8 +16,9 @@
     <option value="">Select a crime type</option>
     <option ng-repeat="crimeType in vm.crimeTypes | orderBy: '_id.crm_cd_desc'" value="{{crimeType._id.crm_cd}}">{{crimeType._id.crm_cd_desc}}</option>
   </select>
-  {{vm.markers.length}}
+
   <div class="list-group">
+    <h2>Top Ten Crimes in Bounds</h2>
     <ol>
       <li ng-repeat="type in vm.topTypes">({{type.count}}) {{type._id}}</li>
     </ol>
@@ -24,6 +27,5 @@
 
 IDEAS
 ajax call on point click
-<br/> drop down should only display crimes in bounds
 <br/> percentage higher than average of crime
 <br/>  How to make distinct location but with multiple crimes? Marker clusters

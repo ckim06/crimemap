@@ -1,5 +1,5 @@
 <ol>
   <li ng-repeat="(key, value) in parameter.markedModel.crime_descs | orderObjectBy:'count':-1">
-    <span class="crimeDesc">{{value.key}}</span> ({{value.count}})
+    {{value.key}} <strong>({{value.count}})</strong>
   </li>
 </ol>

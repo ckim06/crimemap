@@ -1,6 +1,5 @@
 (function() {
   'use strict';
-
   angular
     .module('crimes', ['uiGmapgoogle-maps'])
     .config(function(uiGmapGoogleMapApiProvider) {
@@ -9,6 +8,7 @@
         libraries: 'weather,geometry,visualization'
       });
     })
+    // Order crimes by count.  Data comes back as object.
     .filter('orderObjectBy', function() {
       return function(items, field, reverse) {
         var filtered = [];
@@ -23,12 +23,15 @@
         return filtered;
       };
     })
-  .controller('CrimesListController', CrimesListController);
+    .controller('CrimesListController', CrimesListController);
 
+  // Controller for crime list.
   CrimesListController.$inject = ['CrimesService', 'uiGmapGoogleMapApi', 'uiGmapIsReady'];
 
   function CrimesListController(CrimesService, uiGmapGoogleMapApi, uiGmapIsReady) {
     var vm = this;
+
+    // Inital map settings.
     vm.map = {
       center: {
         latitude: 34.0446,
@@ -37,6 +40,8 @@
       zoom: 14,
       control: {}
     };
+
+    // Display info window
     vm.showWindow = false;
     vm.mapInstance = {};
     vm.markers = [];
@@ -48,11 +53,9 @@
           [bounds.getSouthWest().lng(), bounds.getNorthEast().lat()],
           [bounds.getNorthEast().lng(), bounds.getSouthWest().lat()]
         ]);
-
-        var query = {
+        vm.markers = CrimesService.query({
           'box': vm.boundsBox
-        };
-        vm.markers = CrimesService.query(query);
+        });
       });
 
       vm.map.events = {
@@ -63,9 +66,12 @@
           vm.showWindow = true;
         }
       };
+
       vm.mapInstance.addListener('idle', vm.onIdle);
 
     });
+
+    // Drop down for crime types.
     vm.crimeTypes = CrimesService.types();
 
     vm.onIdle = function() {

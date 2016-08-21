@@ -57,7 +57,7 @@ exports.list = function(req, res) {
     }
   });
 
-  Crime.aggregate(query).limit(5000).exec(function(err, locations) {
+  Crime.aggregate(query).limit(1000).exec(function(err, locations) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -149,7 +149,7 @@ exports.getTop = function(req, res) {
       }
     });
   }
-  Crime.aggregate(request).exec(function(err, crimeTypes) {
+  Crime.aggregate(request).limit(10).exec(function(err, crimeTypes) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
